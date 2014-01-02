@@ -2,14 +2,15 @@
 
 This tutorial will show you how to add Auth0 to a single page AngularJS app. The AngularJS app will consume a REST API as described by the [Using Auth0 in Node.JS APIs Tutorial](https://docs.auth0.com/nodeapi-tutorial).
 
+### Auth0Widget
+
 First of all, include the Auth0 widget script tag:
-```js
+```html
 <!-- Auth0 Widget dependency -->
 <script src="//d19p4zemcycm7a.cloudfront.net/w2/auth0-widget-2.3.js" type="text/javascript"> </script>
 ```
 
-### Auth0Widget
-We will initialize the Auth0 widget in a `.run` block of your application. The idea here is to create an Auth0 Widget instance that we can show from the login controller. You will need to complete here with your Auth0 information:
+We will initialize the Auth0 widget in a [`module.run`](http://docs.angularjs.org/api/angular.Module) block. The idea here is to create an instance that we can access from the login controller. You will need to complete here with your [Auth0 app information](https://app.auth0.com/#/applications):
 
 ```js
   $rootScope.Auth0Widget = new Auth0Widget({
@@ -18,17 +19,17 @@ We will initialize the Auth0 widget in a `.run` block of your application. The i
       callbackURL: 'YOUR_CALLBACK_URL',
 
       /* As we are creating a single page application
-       * in order to handle the redirect we need to redirect
-       * to a hash URL */
+       * in order to handle the redirect we need to send
+       * the user to a hash URL */
       callbackOnLocationHash: true
   });
 ```
 
-What the Auth0 widget will do is perform the authentication and after that redirect the user to a hash URL inside our AngularJS app. On that way, we are going to grab authentication data such as user profile and the token required to communicate to the REST API.
+What the Auth0 widget will do is perform the authentication. After that, it will redirect the user to a hash URL inside our AngularJS app. On that way, we are going to grab authentication data such as user profile and the token required to communicate to the API. Note that `$cookies` can be replaced with `sessionStorage` if you don't need to support old browsers.
 
 ```js
 $rootScope.Auth0Widget.parseHash(window.location.hash, function (profile, id_token, access_token) {
-  // Store the user profile as JSON (cannot persist as object)
+  // Store the user profile as JSON using cookies (cannot persist as object)
   $cookies.profile = JSON.stringify(profile);
 
   // Token we will use to talk to server
@@ -43,7 +44,7 @@ $rootScope.Auth0Widget.parseHash(window.location.hash, function (profile, id_tok
 So the resulting `run` block will look like:
 ```js
 .run(function ($rootScope, $cookies, $location) {
-  // We add the widget to the $rootScope so we can access it from controllers
+  // We add the widget to the $rootScope so we can access it from the Login controller
   $rootScope.Auth0Widget = new Auth0Widget({
       domain: 'your.domain.com',
       clientID: 'YOUR_CLIENT_ID',
@@ -66,7 +67,7 @@ Let's start configuring the routes. You will typically want three routes for the
  * /logout: The route that the user will follow in order to close its session.
  * /main:   A route where you are going to display some restricted content (like for instance, a dashboard).
 
-Let's add the following to the .config block of your application:
+Add the following router configuration to the `.config` block:
 ```js
 
 $routeProvider
@@ -78,7 +79,7 @@ $routeProvider
 ```
 
 ### Controllers
-Next step in this tutorial is to add the required logic to controllers. Let's start by showing the widget on the `Login` controller:
+Next step in this tutorial is to add the required logic to controllers. Let's start by triggering the widget to be shown in the `Login` controller:
 
 ```js
 myApp.controller('LoginCtrl', function ($scope, $rootScope) {
@@ -86,7 +87,7 @@ myApp.controller('LoginCtrl', function ($scope, $rootScope) {
 });
 ```
 
-Then, let's erase the profile and the idToken from the cookies on user logout:
+Then, let's erase `profile` and `idToken` from the cookies on user logout:
 ```js
 myApp.controller('LogoutCtrl', function ($scope, $cookies, $location) {
   $cookies.profile = undefined;
@@ -107,6 +108,8 @@ myApp.controller('MainCtrl', function ($scope, $cookies, $location, $http) {
 };
 ```
 
+Moreover, you can extract this logic in a factory, so you don't need to perform these checks everywhere.
+
 ### Consuming a RESTful API
 
 In order to consume a RESTful API you will need to use the previously saved `id_token` (a [JWT](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html)). So for instance, if you have an existing request using [$http](http://docs.angularjs.org/api/ng.$http) you will need to modify it adding the Authorization header as follows:
@@ -123,7 +126,7 @@ $http({ method: 'GET', url: '/foo', headers: {'Authorization': 'Bearer ' + $cook
 
 On that way your Node.js server knows that you have been authenticated by Auth0.
 
-So, what happens if you have many request and in different places? Do you need to modify every occurrence of $http? Fortunately, this is not the case. If you are using Angular 1.1.x or above you can use a [Request Interceptor](http://docs.angularjs.org/api/ng.$http) to modify the request and add the Authorization header:
+So, what happens if you have to perform many requests in different places? Do you need to modify every occurrence of $http? If you are using Angular 1.1.x or above you can use a [Request Interceptor](http://docs.angularjs.org/api/ng.$http) to modify the request and add the Authorization header:
 
 ```js
 .factory('auth0RequestInterceptor', function ($cookies) {
@@ -144,10 +147,17 @@ Also, you will need to register it to the $httpProvider in the `.config`:
 $httpProvider.interceptors.push('auth0RequestInterceptor');
 ```
 
+##### Angular 1.0.x
+
+In case you are using Angular 1.0.x you can achieve the same by doing:
+```js
+$http.defaults.headers.common['Authorization'] = 'Bearer ' + $cookies.idToken;
+```
+
 #### Sending a request from the controllers
 Last step in the tutorial is to consume a protected part of the API from one of the controllers.
 
-We start by changing the main template and provide a way of executing the request to the protected resource:
+We start by changing the `Main` controller's template and provide a way of executing the request to the protected resource:
 ```html
 <div>
   <br />
@@ -175,4 +185,4 @@ myApp.controller('MainCtrl', function ($scope, $cookies, $location, $http) {
 });
 ```
 
-The `$http` interceptor handles the call, adds the `Authorization` header and the request works. From an users perspective all the controller logic regarding XHR calls will remain the same.
+The `$http` interceptor handles the call, adds the `Authorization` header and the request works. From an users perspective all the controller logic regarding XHR calls will remain the same but now the server can determine whether is authenticated or not.
