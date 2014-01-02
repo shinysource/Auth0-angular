@@ -12,6 +12,7 @@ myApp.controller('LoginCtrl', function ($scope, $rootScope) {
 
 myApp.controller('LogoutCtrl', function ($scope, $cookies, $location) {
   $cookies.profile = undefined;
+  $cookies.idToken = undefined;
   $location.path('/login');
 });
 
