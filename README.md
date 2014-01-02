@@ -3,7 +3,7 @@
 This tutorial will show you how to add Auth0 to a single page AngularJS app. The AngularJS app will consume a REST API as described by the [Using Auth0 in Node.JS APIs Tutorial](https://docs.auth0.com/nodeapi-tutorial).
 
 First of all, include the Auth0 widget and auth0 module script tags:
-```js
+```html
 <!-- Auth0 Widget dependency -->
 <script src="//d19p4zemcycm7a.cloudfront.net/w2/auth0-widget-2.3.js" type="text/javascript"> </script>
 <script src="./scripts/auth0.js" type="text/javascript"> </script>
