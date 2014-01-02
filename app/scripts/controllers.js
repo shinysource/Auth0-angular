@@ -6,19 +6,17 @@ myApp.controller('MenuCtrl', function ($scope, $location) {
   };
 });
 
-myApp.controller('LoginCtrl', function ($scope, $rootScope) {
-  $rootScope.Auth0Widget.signin();
+myApp.controller('LoginCtrl', function (auth0) {
+  auth0.login();
 });
 
-myApp.controller('LogoutCtrl', function ($scope, $cookies, $location) {
-  $cookies.profile = undefined;
-  $cookies.idToken = undefined;
-  $location.path('/login');
+myApp.controller('LogoutCtrl', function (auth0) {
+  auth0.logout();
 });
 
-myApp.controller('MainCtrl', function ($scope, $cookies, $location, $http) {
-  if ($cookies.profile) {
-    $scope.message = "Welcome " + JSON.parse($cookies.profile).name;
+myApp.controller('MainCtrl', function (auth0, $http, $location, $scope) {
+  if (auth0.isAuthenticated()) {
+    $scope.message = 'Welcome ' + auth0.currentUser().name;
   } else {
     $location.path('/login');
     return;
