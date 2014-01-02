@@ -7,10 +7,6 @@ myApp.controller('MenuCtrl', function ($scope, $location) {
 });
 
 myApp.controller('LoginCtrl', function ($scope, $rootScope) {
-  var oldWidget = document.querySelector('#a0-widget')
-  if (oldWidget) {
-    oldWidget.remove();
-  }
   $rootScope.Auth0Widget.signin();
 });
 
@@ -19,10 +15,17 @@ myApp.controller('LogoutCtrl', function ($scope, $cookies, $location) {
   $location.path('/login');
 });
 
-myApp.controller('MainCtrl', function ($scope, $cookies, $location) {
+myApp.controller('MainCtrl', function ($scope, $cookies, $location, $http) {
   if ($cookies.profile) {
     $scope.message = "Welcome " + JSON.parse($cookies.profile).name;
   } else {
     $location.path('/login');
+    return;
   }
-})
+  $scope.sendProtectedMessage = function () {
+    $http({method: 'GET', url: '/api/protected'})
+      .success(function (data, status, headers, config) {
+        $scope.message = 'Protected data was: ' + data;
+      });
+  };
+});
