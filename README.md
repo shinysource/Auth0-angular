@@ -63,9 +63,9 @@ So the resulting `run` block will look like:
 ### Routes
 
 Let's start configuring the routes. You will typically want three routes for the Authentication flow:
- * /login:  The route that will allow the user to input their credentials.
- * /logout: The route that the user will follow in order to close its session.
- * /main:   A route where you are going to display some restricted content (like for instance, a dashboard).
+ * `/login`:  The route that will allow the user to input their credentials.
+ * `/logout`: The route that the user will follow in order to close its session.
+ * `/main`:   A route where you are going to display some restricted content (like for instance, a dashboard).
 
 Add the following router configuration to the `.config` block:
 ```js
