@@ -5,29 +5,29 @@ This tutorial will show you how to add Auth0 to a single page AngularJS app.
 This App will authenticate the user both on client and server sides. Create a new account in Auth0 and choose your server side technology (Node.JS, PHP, ASP.Net or Ruby among others)
 
 1. Include the Auth0 widget and [auth0 module script](/blob/master/app/scripts/auth0.js) tags:
-  ```html
-  <!-- Auth0 Widget dependency -->
-  <script src="//d19p4zemcycm7a.cloudfront.net/w2/auth0-widget-2.3.js" type="text/javascript"> </script>
-  <script src="./scripts/auth0.js" type="text/javascript"> </script>
-  ```
+    ```html
+    <!-- Auth0 Widget dependency -->
+    <script src="//d19p4zemcycm7a.cloudfront.net/w2/auth0-widget-2.3.js" type="text/javascript"> </script>
+    <script src="./scripts/auth0.js" type="text/javascript"> </script>
+    ```
 
 2. Then we need to include the Auth0 module as a dependency of the app main module:
-  ```js
-  var app = angular.module('myApp', ['auth0']);
-  ```
+    ```js
+    var app = angular.module('myApp', ['auth0']);
+    ```
 
 3. Configure AuthProvider with your Auth0 information inside a `.config` section.
-```js
-myApp.config(function ($routeProvider, authProvider) {
-  ...
-  authProvider.init({
-    domain: 'your.domain.com',
-    clientID: 'YOUR_CLIENT_ID',
-    callbackURL: 'http://localhost:1337/',
-    callbackOnLocationHash: true
-  });
-});
-```
+    ```js
+    myApp.config(function ($routeProvider, authProvider) {
+      ...
+      authProvider.init({
+        domain: 'your.domain.com',
+        clientID: 'YOUR_CLIENT_ID',
+        callbackURL: 'http://localhost:1337/',
+        callbackOnLocationHash: true
+      });
+    });
+  ```
 
 4. Let's configure the routes. You will typically want three routes for the Authentication flow:
  * `/login`:  The route that will allow the user to input their credentials.
