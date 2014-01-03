@@ -6,25 +6,26 @@ myApp.controller('MenuCtrl', function ($scope, $location) {
   };
 });
 
-myApp.controller('LoginCtrl', function (auth0) {
-  auth0.login();
-});
-
-myApp.controller('LogoutCtrl', function (auth0) {
-  auth0.logout();
-});
-
-myApp.controller('MainCtrl', function (auth0, $http, $location, $scope) {
-  if (auth0.isAuthenticated()) {
-    $scope.message = 'Welcome ' + auth0.currentUser().name;
-  } else {
+myApp.controller('RootCtrl', function (auth0Widget, $scope, $location, $http) {
+  if (!auth0Widget.isAuthenticated) {
     $location.path('/login');
     return;
   }
+  $scope.auth = auth0Widget;
+
   $scope.sendProtectedMessage = function () {
     $http({method: 'GET', url: '/api/protected'})
       .success(function (data, status, headers, config) {
-        $scope.message = 'Protected data was: ' + data;
+        $scope.result = 'Protected data was: ' + data;
       });
   };
+});
+
+myApp.controller('LoginCtrl', function (auth0Widget, $scope, $location) {
+  auth0Widget.signin();
+});
+
+myApp.controller('LogoutCtrl', function (auth0Widget, $scope, $location) {
+  auth0Widget.signout();
+  $location.path('/login');
 });

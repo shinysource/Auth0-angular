@@ -1,44 +1,65 @@
 (function () {
 
-  var auth0Widget = new Auth0Widget({
-    domain: 'your.domain.com',
-    clientID: 'YOUR_CLIENT_ID',
-    callbackURL: 'YOUR_CALLBACK_URL',
-    callbackOnLocationHash: true
-  });
-
   var auth0 = angular.module('auth0', ['ngCookies', 'ngRoute']);
 
-  auth0.factory('auth0', function ($cookies, $location) {
+  function Auth0WidgetWrapper(auth0Widget, $cookies, $rootScope) {
+    this.auth0Widget = auth0Widget;
+    this.$cookies    = $cookies;
+    this.$rootScope  = $rootScope;
+  }
 
-    function Auth0() { }
+  Auth0WidgetWrapper.prototype = {};
 
-    Auth0.prototype = {};
+  Auth0WidgetWrapper.prototype.signin = function (options) {
+    this.auth0Widget.signin(options);
+  };
 
-    Auth0.prototype.login = function (pathToRedirect) {
-      $cookies.loginRedirectTo = pathToRedirect || '/main';
-      auth0Widget.signin();
+  Auth0WidgetWrapper.prototype.signout = function (pathToRedirect) {
+    this.$cookies.profile = undefined;
+    this.$cookies.idToken = undefined;
+    this.$cookies.accessToken = undefined;
+    this.$cookies.isAuthenticated = true;
+
+    this.profile = undefined;
+    this.isAuthenticated = false;
+    this.idToken = undefined;
+    this.accessToken = undefined;
+  };
+
+  Auth0WidgetWrapper.prototype.parseHash = function (locationHash, callback) {
+    this.auth0Widget.parseHash(locationHash, callback);
+  };
+
+  Auth0WidgetWrapper.prototype.signup = function (options) {
+    this.auth0Widget.signup(options);
+  };
+
+  Auth0WidgetWrapper.prototype.reset = function (options) {
+    this.auth0Widget.reset(options);
+  };
+
+  auth0.provider('auth0Widget', function () {
+    var auth0WidgetWrapper, auth0Widget;
+
+    this.init = function (options) {
+      if (options.callbackOnLocationHash === undefined) {
+        options.callbackOnLocationHash = true;
+      }
+
+      auth0Widget = new Auth0Widget(options);
     };
 
-    Auth0.prototype.logout = function (pathToRedirect) {
-      $cookies.profile = undefined;
-      $cookies.idToken = undefined;
-      $location.path(pathToRedirect || '/login');
-    };
+    this.$get = function ($cookies, $rootScope) {
+      if (!auth0Widget) {
+        throw new Error('You need add to your config Auth0 initialization');
+      }
 
-    Auth0.prototype.isAuthenticated = function () {
-      return !!$cookies.profile;
-    };
+      if (!auth0WidgetWrapper) {
+        auth0WidgetWrapper = new Auth0WidgetWrapper(auth0Widget, $cookies, $rootScope);
+      }
 
-    Auth0.prototype.currentUser = function () {
-      return JSON.parse($cookies.profile);
+      return auth0WidgetWrapper;
     };
-
-    Auth0.prototype.token = function () {
-      return $cookies.idToken;
-    };
-
-    return new Auth0();
   });
 
   // Auth0 Request Interceptor
@@ -47,7 +68,7 @@
       request: function (config) {
         config.headers = config.headers = {};
         if ($cookies.idToken) {
-          config.headers['Authorization'] = 'Bearer '+ $cookies.idToken;
+          config.headers.Authorization = 'Bearer '+ $cookies.idToken;
         }
         return config;
       }
@@ -58,14 +79,20 @@
     $httpProvider.interceptors.push('auth0RequestInterceptor');
   });
 
-  // Auth0 Widget init
-  auth0.run(function ($rootScope, $cookies, $location) {
-      auth0Widget.parseHash(window.location.hash, function (profile, id_token, access_token, state) {
+  auth0.run(function (auth0Widget, $cookies, $location, $rootScope, $timeout, $route, $document) {
+    auth0Widget.parseHash(window.location.hash, function (profile, id_token, access_token, state) {
       $cookies.profile = JSON.stringify(profile);
       $cookies.idToken = id_token;
-      $location.path($cookies.loginRedirectTo);
+      $cookies.accessToken = access_token;
+      $cookies.isAuthenticated = true;
+      $location.path('/');
     });
 
+    if ($cookies.profile) {
+      auth0Widget.profile = JSON.parse($cookies.profile);
+      auth0Widget.isAuthenticated = !!$cookies.profile;
+      auth0Widget.idToken = $cookies.idToken;
+      auth0Widget.accessToken = $cookies.accessToken;
+    }
   });
-
 }());
