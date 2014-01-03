@@ -1,6 +1,6 @@
 (function () {
 
-  var auth0 = angular.module('auth0', ['ngCookies', 'ngRoute']);
+  var auth0 = angular.module('auth0', ['ngCookies']);
 
   function Auth0WidgetWrapper(auth0Widget, $cookies, $rootScope) {
     this.auth0Widget = auth0Widget;
@@ -61,7 +61,7 @@
     };
   });
 
-  auth0.run(function (auth, $cookies, $location, $rootScope, $timeout, $route, $document) {
+  auth0.run(function (auth, $cookies, $location, $rootScope, $timeout, $document) {
     auth.parseHash(window.location.hash, function (profile, id_token, access_token, state) {
       $cookies.profile = JSON.stringify(profile);
       $cookies.idToken = id_token;
