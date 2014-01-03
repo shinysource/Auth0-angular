@@ -2,7 +2,7 @@ var myApp = angular.module('myApp', [
   'ngCookies', 'ngRoute', 'auth0'
 ]);
 
-myApp.config(function ($routeProvider, auth0WidgetProvider) {
+myApp.config(function ($routeProvider, authProvider) {
   $routeProvider
   .when('/logout',  {
     templateUrl: 'views/logout.html',
@@ -22,7 +22,7 @@ myApp.config(function ($routeProvider, auth0WidgetProvider) {
   })
   .otherwise({ redirectTo: '/login' });
 
-  auth0WidgetProvider.init({
+  authProvider.init({
     domain: 'your.domain.com',
     clientID: 'YOUR_CLIENT_ID',
     callbackURL: 'YOUR_CALLBACK_URL',

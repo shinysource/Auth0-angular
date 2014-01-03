@@ -6,12 +6,12 @@ myApp.controller('MenuCtrl', function ($scope, $location) {
   };
 });
 
-myApp.controller('RootCtrl', function (auth0Widget, $scope, $location, $http) {
-  if (!auth0Widget.isAuthenticated) {
+myApp.controller('RootCtrl', function (auth, $scope, $location, $http) {
+  if (!auth.isAuthenticated) {
     $location.path('/login');
     return;
   }
-  $scope.auth = auth0Widget;
+  $scope.auth = auth;
 
   $scope.sendProtectedMessage = function () {
     $http({method: 'GET', url: '/api/protected'})
@@ -21,11 +21,11 @@ myApp.controller('RootCtrl', function (auth0Widget, $scope, $location, $http) {
   };
 });
 
-myApp.controller('LoginCtrl', function (auth0Widget, $scope, $location) {
-  auth0Widget.signin();
+myApp.controller('LoginCtrl', function (auth, $scope, $location) {
+  auth.signin();
 });
 
-myApp.controller('LogoutCtrl', function (auth0Widget, $scope, $location) {
-  auth0Widget.signout();
+myApp.controller('LogoutCtrl', function (auth, $scope, $location) {
+  auth.signout();
   $location.path('/login');
 });

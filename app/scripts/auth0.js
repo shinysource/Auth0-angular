@@ -38,7 +38,7 @@
     this.auth0Widget.reset(options);
   };
 
-  auth0.provider('auth0Widget', function () {
+  auth0.provider('auth', function () {
     var auth0WidgetWrapper, auth0Widget;
 
     this.init = function (options) {
@@ -79,8 +79,8 @@
     $httpProvider.interceptors.push('auth0RequestInterceptor');
   });
 
-  auth0.run(function (auth0Widget, $cookies, $location, $rootScope, $timeout, $route, $document) {
-    auth0Widget.parseHash(window.location.hash, function (profile, id_token, access_token, state) {
+  auth0.run(function (auth, $cookies, $location, $rootScope, $timeout, $route, $document) {
+    auth.parseHash(window.location.hash, function (profile, id_token, access_token, state) {
       $cookies.profile = JSON.stringify(profile);
       $cookies.idToken = id_token;
       $cookies.accessToken = access_token;
@@ -89,10 +89,10 @@
     });
 
     if ($cookies.profile) {
-      auth0Widget.profile = JSON.parse($cookies.profile);
-      auth0Widget.isAuthenticated = !!$cookies.profile;
-      auth0Widget.idToken = $cookies.idToken;
-      auth0Widget.accessToken = $cookies.accessToken;
+      auth.profile = JSON.parse($cookies.profile);
+      auth.isAuthenticated = !!$cookies.profile;
+      auth.idToken = $cookies.idToken;
+      auth.accessToken = $cookies.accessToken;
     }
   });
 }());
