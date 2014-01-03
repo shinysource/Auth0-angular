@@ -29,7 +29,7 @@ This App will authenticate the user both on client and server sides. Create a ne
     });
   ```
 
-4. Let's configure the routes. You will typically want three routes for the Authentication flow:
+4. Let's configure the routes. We are going to configure three routes for the Authentication flow but you may use a single route or as many routes as you want:
  * `/login`:  The route that will allow the user to input their credentials.
  * `/logout`: The route that the user will follow in order to close its session.
  * `/`:   A route where you are going to display some restricted content (like for instance, a dashboard).
@@ -46,28 +46,6 @@ Add the following router configuration to the `.config` block.
       .when('/login',   { templateUrl: 'views/login.html',    controller: 'LoginCtrl'   })
     
       .otherwise({ redirectTo: '/login' });
-    });
-    ```
-    So far, your `.config` block should me looking like this:
-    ```js
-    myApp.config(function ($routeProvider, authProvider) {
-    
-      ...
-    
-      $routeProvider
-      .when('/logout',  { templateUrl: 'views/logout.html', controller: 'LogoutCtrl' })
-      .when('/login',   { templateUrl: 'views/login.html',  controller: 'LoginCtrl' })
-      .when('/public',  { templateUrl: 'views/public.html', controller: 'PublicCtrl' })
-      .when('/',        { templateUrl: 'views/root.html',   controller: 'RootCtrl' })
-    
-      .otherwise(       { redirectTo: '/login' });
-    
-      authProvider.init({
-        domain: 'your.domain.com',
-        clientID: 'YOUR_CLIENT_ID',
-        callbackURL: 'http://localhost:1337/',
-        callbackOnLocationHash: true
-      });
     });
     ```
 
