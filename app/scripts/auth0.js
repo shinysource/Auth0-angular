@@ -18,7 +18,6 @@
     this.$cookies.profile = undefined;
     this.$cookies.idToken = undefined;
     this.$cookies.accessToken = undefined;
-    this.$cookies.isAuthenticated = true;
 
     this.profile = undefined;
     this.isAuthenticated = false;
@@ -84,7 +83,6 @@
       $cookies.profile = JSON.stringify(profile);
       $cookies.idToken = id_token;
       $cookies.accessToken = access_token;
-      $cookies.isAuthenticated = true;
       $location.path('/');
     });
 
