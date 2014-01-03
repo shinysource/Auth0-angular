@@ -49,16 +49,14 @@ Add the following router configuration to the `.config` block.
     });
     ```
 
-5. Now you can inject the `auth` service in your controllers and call the `signin`/`signout` methods. Let's start by showing the widget on the `Login` controller.
-After doing that, we are going to add the `auth` among the injected instances. We are going to call the `signin` method that displays the widget.
-
+5. Now you can inject the `auth` service in your controllers and call the `signin`/`signout` methods. 
   ```js
   myApp.controller('LoginCtrl', function ($scope, auth) {
     auth.signin();
   });
   ```
 
-  Then, on signout let's call `auth`'s same named method:
+  Then, on `signout` let's call `auth`'s same named method:
 
   ```js
   myApp.controller('LogoutCtrl', function ($scope, auth) {
