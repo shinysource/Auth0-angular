@@ -2,8 +2,8 @@ var express   = require('express');
 var app       = express();
 var jwt       = require('express-jwt');
 
-var SECRET    = 'YOUR_SECRET';
-var AUDIENCE  = 'YOUR_AUDIENCE';
+var SECRET    = 'A92LWsdBgH6legaUm8U3uyJ7n1bdEik7WvO8nQab9LlHTtnawpRx8d-HPqW0b2g-';
+var AUDIENCE  = 'DyG9nCwIEofSy66QM3oo5xU6NFs3TmvT';
 
 var authenticate = jwt({
   secret: new Buffer(SECRET, 'base64'),
@@ -12,7 +12,7 @@ var authenticate = jwt({
 
 app.use(express.logger());
 
-app.use('/', express.static(__dirname + '/app'));
+app.use('/', express.static(__dirname + '/'));
 
 app.use('/api', authenticate);
 

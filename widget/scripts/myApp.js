@@ -19,9 +19,9 @@ myApp.config(function ($routeProvider, authProvider) {
   .otherwise({ redirectTo: '/login' });
 
   authProvider.init({
-    domain: 'your.domain.com',
-    clientID: 'YOUR_CLIENT_ID',
-    callbackURL: 'YOUR_CALLBACK_URL',
+    domain: 'contoso.auth0.com',
+    clientID: 'DyG9nCwIEofSy66QM3oo5xU6NFs3TmvT',
+    callbackURL: 'http://localhost:1337/widget',
     callbackOnLocationHash: true
   });
 });
