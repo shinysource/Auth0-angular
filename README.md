@@ -86,8 +86,8 @@ Add the following router configuration to the `.config` block.
 ## Calling an API
 On this section we are going to consume a protected part of the API from one of the controllers.
 
-
 1. Add to you application a new factory called `authRequestInterceptor`. This factory is going to intercept the HTTP request and add the required Authorization header.
+    
   ```js
   myApp.factory('authRequestInterceptor', function (auth) {
     return {
@@ -101,6 +101,7 @@ On this section we are going to consume a protected part of the API from one of 
     };
   });
   ```
+  > Note: We are using the standard [JSON Web Token](http://tools.ietf.org/html/draft-jones-json-web-token).
 
 2. Add to a config section of your app the following snippet:
   ```js
@@ -108,10 +109,10 @@ On this section we are going to consume a protected part of the API from one of 
   
     ...
   
-    $httpProvider.interceptors.push('auth0RequestInterceptor');
+    $httpProvider.interceptors.push('authRequestInterceptor');
   });
   ```
-That will make the $http use that interceptor by default for all the XHR requests.
+That will make the `$http` use that interceptor by default for all the XHR requests.
 
 3. Use `$http` from your controller in order to make the request.
   ```js
