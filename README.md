@@ -49,7 +49,7 @@ Add the following router configuration to the `.config` block.
     });
     ```
 
-5. Next step is to add the required logic to controllers. Let's start by showing the widget on the `Login` controller.
+5. Now you can inject the `auth` service in your controllers and call the `signin`/`signout` methods. Let's start by showing the widget on the `Login` controller.
 After doing that, we are going to add the `auth` among the injected instances. We are going to call the `signin` method that displays the widget.
 
   ```js
