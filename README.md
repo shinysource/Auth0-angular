@@ -116,12 +116,24 @@ That will make the `$http` use that interceptor by default for all the XHR reque
 
 3. Use `$http` from your controller in order to make the request.
   ```js
-  $scope.sendProtectedMessage = function () {
     $http({method: 'GET', url: '/api/protected'})
       .success(function (data, status, headers, config) {
-        $scope.message = 'Protected data was: ' + data;
+        // User authenticated, do something with the response
+        ...
+      })
+      .error(function (data, status, headers, config) {
+        ...
       });
-  };
   ```
 
-The controller performs a GET on the resource located on `/api/protected` when `sendProtectedMessage` is called. A custom Auth0 `$http` interceptor handles the call, adds the `Authorization` header and the request works. From an users perspective all the controller logic regarding XHR calls will remain the same.
+4. If the JSON Web Token (`JWT`) has expired or has been tampered you can handle that case here:
+
+    ```js
+        $rootScope.$on('auth:forbidden', function (event, response) {
+            // handle the case where the user is not authenticated (401 status code)
+            auth.signout();
+            $location.path('/login');        
+        });
+    ```
+    
+
