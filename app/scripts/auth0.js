@@ -61,23 +61,6 @@
     };
   });
 
-  // Auth0 Request Interceptor
-  auth0.factory('auth0RequestInterceptor', function ($cookies) {
-    return {
-      request: function (config) {
-        config.headers = config.headers = {};
-        if ($cookies.idToken) {
-          config.headers.Authorization = 'Bearer '+ $cookies.idToken;
-        }
-        return config;
-      }
-    };
-  });
-
-  auth0.config(function ($httpProvider) {
-    $httpProvider.interceptors.push('auth0RequestInterceptor');
-  });
-
   auth0.run(function (auth, $cookies, $location, $rootScope, $timeout, $route, $document) {
     auth.parseHash(window.location.hash, function (profile, id_token, access_token, state) {
       $cookies.profile = JSON.stringify(profile);
