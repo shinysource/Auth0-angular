@@ -15,9 +15,7 @@ This App will authenticate the user both on client and server sides. Create a ne
 ```js
 var app = angular.module('myApp', ['auth0']);
 ```
-
 3. Configure AuthProvider with your Auth0 information inside a `.config` section.
-
 ```js
 myApp.config(function ($routeProvider, authProvider) {
 
@@ -36,7 +34,6 @@ myApp.config(function ($routeProvider, authProvider) {
  * `/login`:  The route that will allow the user to input their credentials.
  * `/logout`: The route that the user will follow in order to close its session.
  * `/`:   A route where you are going to display some restricted content (like for instance, a dashboard).
-
 Add the following router configuration to the `.config` block:
 ```js
 myApp.config(function ($routeProvider, authProvider) {
@@ -51,9 +48,7 @@ myApp.config(function ($routeProvider, authProvider) {
   .otherwise({ redirectTo: '/login' });
 });
 ```
-
 So far, your `.config` block should me looking like this:
-
 ```js
 myApp.config(function ($routeProvider, authProvider) {
 
@@ -88,9 +83,7 @@ myApp.config(function ($routeProvider, authProvider) {
 ```
 
 5. Next step is to add the required logic to controllers. Let's start by showing the widget on the `Login` controller.
-
 After doing that, we are going to add the `auth` among the injected instances. We are going to call the `signin` method that displays the widget.
-
 ```js
 myApp.controller('LoginCtrl', function ($scope, auth) {
   auth.signin();
@@ -102,7 +95,6 @@ myApp.controller('LogoutCtrl', function ($scope, auth) {
   auth0.signout();
 });
 ```
-
 On the `Root` controller, or any other controller where you need the user to be logged in just you will need to do the following:
 
 ```js
@@ -115,7 +107,6 @@ myApp.controller('RootCtrl', function ($scope, $location, $http, auth) {
   $scope.user = auth.profile;
 };
 ```
-
 The template of that controller will be:
 ```html
 <div>
@@ -125,9 +116,7 @@ The template of that controller will be:
 ```
 
 ## Calling an API
-
 On this section we are going to consume a protected part of the API from one of the controllers.
-
 1. Add to you application a new factory called `authRequestInterceptor`. This factory is going to intercept the HTTP request and add the required Authorization header.
 ```js
 myApp.factory('authRequestInterceptor', function (auth) {
@@ -143,7 +132,6 @@ myApp.factory('authRequestInterceptor', function (auth) {
 });
 ```
 
-
 2. Add to a config section of your app the following snippet:
 ```js
 myApp.config(function ($httpProvider) {
@@ -153,7 +141,6 @@ myApp.config(function ($httpProvider) {
   $httpProvider.interceptors.push('auth0RequestInterceptor');
 });
 ```
-
 That will make the $http use that interceptor by default for all the XHR requests.
 
 3. Use `$http` from your controller in order to make the request.
@@ -165,5 +152,4 @@ $scope.sendProtectedMessage = function () {
     });
 };
 ```
-
 The controller performs a GET on the resource located on `/api/protected` when `sendProtectedMessage` is called. A custom Auth0 `$http` interceptor handles the call, adds the `Authorization` header and the request works. From an users perspective all the controller logic regarding XHR calls will remain the same.
