@@ -49,6 +49,8 @@ Add the following router configuration to the `.config` block.
     });
     ```
 
+> Note: We are currently using Angular's ngRoute but any other routing library can be used.
+
 5. Now you can inject the `auth` service in your controllers and call the `signin`/`signout` methods. 
   ```js
   myApp.controller('LoginCtrl', function ($scope, auth) {
