@@ -63,8 +63,9 @@ Add the following router configuration to the `.config` block.
     auth0.signout();
   });
   ```
-  
-  On the `Root` controller, or any other controller where you need the user to be logged in just you will need to do the following:
+
+
+6. Use the `auth.profile` object to show user attributes in the view.  On the `Root` controller, or any other controller where you need the user to be logged in just you will need to do the following:
 
   ```js
   myApp.controller('RootCtrl', function ($scope, $location, $http, auth) {
@@ -77,6 +78,7 @@ Add the following router configuration to the `.config` block.
   };
   ```
   The template of that controller will be:
+  
   ```html
   <div>
     <br />
