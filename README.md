@@ -64,21 +64,16 @@ Add the following router configuration to the `.config` block.
   });
   ```
 
-
-6. Use the `auth.profile` object to show user attributes in the view.  On the `Root` controller, or any other controller where you need the user to be logged in just you will need to do the following:
-
+6. Use the `auth.profile` object to show user attributes in the view.
   ```js
   myApp.controller('RootCtrl', function ($scope, $location, $http, auth) {
-    if (!auth.isAuthenticated) {
-      $location.path('/login');
-      return;
-    }
-  
+
+    ...
+
     $scope.user = auth.profile;
   };
   ```
   The template of that controller will be:
-  
   ```html
   <div>
     <br />
