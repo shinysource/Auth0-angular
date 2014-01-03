@@ -1,5 +1,5 @@
 var myApp = angular.module('myApp', [
-  'ngCookies', 'ngRoute', 'auth0'
+  'ngCookies', 'ngRoute', 'auth0', 'authInterceptor'
 ]);
 
 myApp.config(function ($routeProvider, authProvider) {
@@ -11,10 +11,6 @@ myApp.config(function ($routeProvider, authProvider) {
   .when('/login',   {
     templateUrl: 'views/login.html',
     controller: 'LoginCtrl',
-  })
-  .when('/public', {
-    templateUrl: 'views/public.html',
-    controller: 'PublicCtrl',
   })
   .when('/', {
     templateUrl: 'views/root.html',

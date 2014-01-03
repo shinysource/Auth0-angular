@@ -11,7 +11,11 @@
   Auth0WidgetWrapper.prototype = {};
 
   Auth0WidgetWrapper.prototype.signin = function (options) {
-    this.auth0Widget.signin(options);
+    if (this.auth0Widget.signin) {
+      this.auth0Widget.signin(options);
+    } else {
+      this.auth0Widget.login(options);
+    }
   };
 
   Auth0WidgetWrapper.prototype.signout = function (pathToRedirect) {
@@ -45,7 +49,13 @@
         options.callbackOnLocationHash = true;
       }
 
-      auth0Widget = new Auth0Widget(options);
+      // User has included widget
+      if (typeof Auth0Widget !== 'undefined') {
+        auth0Widget = new Auth0Widget(options);
+      } else {
+        auth0Widget = new Auth0(options);
+      }
+
     };
 
     this.$get = function ($cookies, $rootScope) {
@@ -76,4 +86,30 @@
       auth.accessToken = $cookies.accessToken;
     }
   });
+
+  var authInterceptorModule = angular.module('authInterceptor', ['auth0']);
+
+  authInterceptorModule.factory('authInterceptor', function (auth, $rootScope) {
+    return {
+      request: function (config) {
+        config.headers = config.headers = {};
+        if (auth.idToken) {
+          config.headers.Authorization = 'Bearer '+ auth.idToken;
+        }
+        return config;
+      },
+      response: function (response) {
+        // handle the case where the user is not authenticated
+        if (response.status === 401) {
+          $rootScope.$broadcast('auth:forbidden', response);
+        }
+        return response || $q.when(response);
+      }
+    };
+  });
+
+  authInterceptorModule.config(function ($httpProvider) {
+    $httpProvider.interceptors.push('authInterceptor');
+  });
+
 }());
