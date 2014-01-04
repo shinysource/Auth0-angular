@@ -2,26 +2,22 @@
 
   var auth0 = angular.module('auth0', ['ngCookies']);
 
-  function Auth0WidgetWrapper(auth0Widget, $cookies, $rootScope) {
-    this.auth0Widget = auth0Widget;
+  function Auth0Wrapper(auth0Lib, $cookies, $rootScope) {
+    this.auth0Lib = auth0Lib;
     this.$cookies    = $cookies;
     this.$rootScope  = $rootScope;
   }
 
-  Auth0WidgetWrapper.prototype = {};
+  Auth0Wrapper.prototype = {};
 
-  Auth0WidgetWrapper.prototype.signin = function (options) {
+  Auth0Wrapper.prototype.signin = function (options) {
     var that = this;
-    if (this.auth0Widget.signin) {
-      this.auth0Widget.signin(options);
-    } else {
-      this.auth0Widget.login(options, function (err) {
-        that.$rootScope.$broadcast('auth:login-error', err);
-      });
-    }
+    this.auth0Lib.signin(options, function (err) {
+      that.$rootScope.$broadcast('auth:login-error', err);
+    });
   };
 
-  Auth0WidgetWrapper.prototype.signout = function (pathToRedirect) {
+  Auth0Wrapper.prototype.signout = function (pathToRedirect) {
     this.$cookies.profile = undefined;
     this.$cookies.idToken = undefined;
     this.$cookies.accessToken = undefined;
@@ -32,20 +28,20 @@
     this.accessToken = undefined;
   };
 
-  Auth0WidgetWrapper.prototype.parseHash = function (locationHash, callback) {
-    this.auth0Widget.parseHash(locationHash, callback);
+  Auth0Wrapper.prototype.parseHash = function (locationHash, callback) {
+    this.auth0Lib.parseHash(locationHash, callback);
   };
 
-  Auth0WidgetWrapper.prototype.signup = function (options) {
-    this.auth0Widget.signup(options);
+  Auth0Wrapper.prototype.signup = function (options) {
+    this.auth0Lib.signup(options);
   };
 
-  Auth0WidgetWrapper.prototype.reset = function (options) {
-    this.auth0Widget.reset(options);
+  Auth0Wrapper.prototype.reset = function (options) {
+    this.auth0Lib.reset(options);
   };
 
   auth0.provider('auth', function () {
-    var auth0WidgetWrapper, auth0Widget;
+    var auth0Wrapper, auth0Lib;
 
     this.init = function (options) {
       if (options.callbackOnLocationHash === undefined) {
@@ -54,23 +50,23 @@
 
       // User has included widget
       if (typeof Auth0Widget !== 'undefined') {
-        auth0Widget = new Auth0Widget(options);
+        auth0Lib = new Auth0Widget(options);
       } else {
-        auth0Widget = new Auth0(options);
+        auth0Lib = new Auth0(options);
       }
 
     };
 
     this.$get = function ($cookies, $rootScope) {
-      if (!auth0Widget) {
+      if (!auth0Lib) {
         throw new Error('You need add to your config Auth0 initialization');
       }
 
-      if (!auth0WidgetWrapper) {
-        auth0WidgetWrapper = new Auth0WidgetWrapper(auth0Widget, $cookies, $rootScope);
+      if (!auth0Wrapper) {
+        auth0Wrapper = new Auth0Wrapper(auth0Lib, $cookies, $rootScope);
       }
 
-      return auth0WidgetWrapper;
+      return auth0Wrapper;
     };
   });
 
@@ -80,6 +76,8 @@
       $cookies.idToken = id_token;
       $cookies.accessToken = access_token;
       $location.path('/');
+    }, function (err) {
+      $rootScope.$broadcast('auth:error', err);
     });
 
     if ($cookies.profile) {
