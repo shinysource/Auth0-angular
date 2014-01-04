@@ -74,6 +74,8 @@ Add the following router configuration to the `.config` block.
   });
   ```
 
+  > More details about the parameters for the [Auth0 Login Widget](https://docs.auth0.com/login-widget2) and [auth0.js](https://github.com/auth0/auth0.js). 
+
 6. Use the `auth.profile` object to show user attributes in the view.
   ```js
   myApp.controller('RootCtrl', function ($scope, $location, $http, auth) {
