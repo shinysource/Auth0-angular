@@ -18,7 +18,6 @@ This App will authenticate the user both on client and server sides. Create a ne
     ```js
     <script src="./scripts/auth0.js" type="text/javascript"> </script>
     ```
-If you want to use Auth0.js include the following tags:
 
 2. Then we need to include the Auth0 module as a dependency of the app main module:
     ```js
