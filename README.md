@@ -99,7 +99,7 @@ Add the following router configuration to the `.config` block.
 
 ## Calling an API
 
-Now that the user was authenticated on the client side, you want to make sure that every time an API is called, the user attributes are sent in a secure way. The `auth` service that you used before also provides a `token` which is a signed [JSON Web Token](http://tools.ietf.org/html/draft-jones-json-web-token). This token can be sent through an HTTP header and the backedn API can validaate it without any extra roundtrip (since the token has been signed by a trusted authority).
+Now that the user was authenticated on the client side, you want to make sure that every time an API is called, the user attributes are sent in a secure way. The `auth` service that you used before also provides a `token` which is a signed [JSON Web Token](http://tools.ietf.org/html/draft-jones-json-web-token). This token can be sent through an HTTP header and the backedn API can validaate it without any extra roundtrip (since the token has been signed with a secret that is shared between the API and Auth0).
 
 1. Add to you application the `authInterceptor` dependency (it's included in the same auth0-angular.js file).
     
