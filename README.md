@@ -32,7 +32,7 @@ For this tutorial, you need to create a new account in [Auth0](https://www.auth0
     var app = angular.module('myApp', ['auth0']);
     ```
 
-3. Configure it with your Auth0 application information inside a `.config` section.
+3. Inject and initiate the `auth` service in the app main config block with your `domain`, `clientID` and `callbackURL` (get them from Auth0 dashboard in the Application settings).
     ```js
     myApp.config(function ($routeProvider, authProvider) {
       ...
