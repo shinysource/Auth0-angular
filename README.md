@@ -6,9 +6,9 @@ This AngularJS module will help you implement client-side and server-side (API) 
 
 # Tutorial
 
-## Client Side Authentication
+For this tutorial, you need to create a new account in [Auth0](https://www.auth0.com) and setup a new application. We will then implement client side and server side auth.
 
-Create a new account in Auth0 and setup a new application.
+## Client Side Authentication
 
 1. There are two ways of implementing signin/singup. One is using our [Login Widget](https://docs.auth0.com/login-widget2) and the other using the [Auth0.js SDK](https://github.com/auth0/auth0.js). 
     ```html
