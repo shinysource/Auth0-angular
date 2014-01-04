@@ -4,12 +4,21 @@ This tutorial will show you how to add Auth0 to a single page AngularJS app.
 
 This App will authenticate the user both on client and server sides. Create a new account in Auth0 and choose your server side technology ([Node.JS](https://docs.auth0.com/nodeapi-tutorial), [PHP](https://docs.auth0.com/phpapi-tutorial), [ASP.NET](https://docs.auth0.com/aspnetwebapi-tutorial) or [Ruby](https://docs.auth0.com/rubyapi-tutorial) among others)
 
-1. Include the Auth0 widget and [auth0 module script](/app/scripts/auth0.js) tags:
+1. If you want to use Auth0 login widget include:
     ```html
-    <!-- Auth0 Widget dependency -->
     <script src="//d19p4zemcycm7a.cloudfront.net/w2/auth0-widget-2.3.js" type="text/javascript"> </script>
+    ```
+
+    Otherwise, if you want to build your own login UI:
+    ```html
+    <script src="https://d19p4zemcycm7a.cloudfront.net/w2/auth0-1.2.8.min.js"></script>
+    ```
+    
+2.  Add [Auth0 Angular module script](/app/scripts/auth0.js):
+    ```js
     <script src="./scripts/auth0.js" type="text/javascript"> </script>
     ```
+If you want to use Auth0.js include the following tags:
 
 2. Then we need to include the Auth0 module as a dependency of the app main module:
     ```js
