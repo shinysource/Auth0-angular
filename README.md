@@ -142,6 +142,47 @@ On the backed you can use any JWT library to validate the token. Here are some:
 
 ---
 
+## Bonus tracks
+
+### Redirect to route if user is not authenticated
+
+If you have multiple routes and you want to control what routes are anonymous, what routes need authentication and even do some custom logic to decide whether or not the user can access a route, 
+
+#### Apprach 1: embedded in the controller (the simplest)
+
+The simplest way would be handling it at the controller level.
+
+```js
+myApp.controller('RootCtrl', function (auth, $scope, $location, $http) {
+  if (!auth.isAuthenticated) {
+    $location.path('/login');
+    return;
+  }
+  
+  // user is authenticated
+}
+```
+
+#### Apprach 2: at the router level
+
+You could also do something at the routing level. Our module is not coupled with any particular implementation of Angular routing, so you can choose the default `ngRoute`, the [ui-router](https://github.com/angular-ui/ui-router) or some other custom module like [Angular Routing](https://github.com/dotJEM/angular-routing)
+
+This [article](https://medium.com/p/4e927af3a15f) explains such approach using the [ui-router](https://github.com/angular-ui/ui-router)
+
+```js
+angular.module("myApp")
+  .run(function ($rootScope, $state, auth) {
+    $rootScope.$on("$stateChangeStart", function(curr, prev){
+      if (curr.authenticate && !auth.isAuthenticated){
+        // User isn’t authenticated
+        $state.transitionTo("login");
+      }
+    });
+  });
+```
+
+> The `authenticate` attribute is a boolean that you add to your routing table specifying that the route needs authentication. Read more about this approach in the [article](https://medium.com/p/4e927af3a15f).
+
 ## What is Auth0?
 
 Auth0 helps you to:
