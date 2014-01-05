@@ -123,6 +123,9 @@ Now that the user was authenticated on the client side, you want to make sure th
       });
   ```
 
+  > NOTE: behind the scenes, the `authInterceptor` will add the JSON Web Token to each request. Something like: `config.headers.Authorization = 'Bearer '+ auth.idToken;`
+
+
 3. If the JSON Web Token (`JWT`) has expired or has been tampered, you can handle that case here:
 
     ```js
@@ -146,7 +149,7 @@ On the backed you can use any JWT library to validate the token. Here are some:
 
 ### Redirect to route if user is not authenticated
 
-If you have multiple routes and you want to control what routes are anonymous, what routes need authentication and even do some custom logic to decide whether or not the user can access a route, 
+If you have multiple routes and you want to control what routes are anonymous, what routes need authentication and even do some custom logic to decide whether or not the user can access a route, read below.
 
 #### Apprach 1: embedded in the controller (the simplest)
 
@@ -165,7 +168,7 @@ myApp.controller('RootCtrl', function (auth, $scope, $location, $http) {
 
 #### Apprach 2: at the router level
 
-You could also do something at the routing level. Our module is not coupled with any particular implementation of Angular routing, so you can choose the default `ngRoute`, the [ui-router](https://github.com/angular-ui/ui-router) or some other custom module like [Angular Routing](https://github.com/dotJEM/angular-routing)
+You could also do something at the routing level. Our module is not coupled with any particular implementation of Angular routing, so you can choose the default `ngRoute`, the [ui-router](https://github.com/angular-ui/ui-router) or some other custom module like [Angular Routing](https://github.com/dotJEM/angular-routing).
 
 This [article](https://medium.com/p/4e927af3a15f) explains such approach using the [ui-router](https://github.com/angular-ui/ui-router)
 
@@ -182,6 +185,8 @@ angular.module("myApp")
 ```
 
 > The `authenticate` attribute is a boolean that you add to your routing table specifying that the route needs authentication. Read more about this approach in the [article](https://medium.com/p/4e927af3a15f).
+
+---
 
 ## What is Auth0?
 
