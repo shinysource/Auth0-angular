@@ -186,6 +186,16 @@ angular.module("myApp")
 
 > The `authenticate` attribute is a boolean that you add to your routing table specifying that the route needs authentication. Read more about this approach in the [article](https://medium.com/p/4e927af3a15f).
 
+
+### Examples
+
+There are two examples:
+
+* [widget]: a simple angular app doing auth with social and username/password using the Login Widget.
+* [custom-login]: same as the previous one but without using the widget, just a custom login form.
+
+The server side is using node.js and you can run it with `npm install && node app.js`. It is pre-configured with a demo account with Amazon, Facebook, Google and username/password credentials.
+
 ---
 
 ## What is Auth0?
