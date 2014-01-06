@@ -93,7 +93,7 @@
   authInterceptorModule.factory('authInterceptor', function (auth, $rootScope, $q) {
     return {
       request: function (config) {
-        config.headers = config.headers = {};
+        config.headers = config.headers || {};
         if (auth.idToken) {
           config.headers.Authorization = 'Bearer '+ auth.idToken;
         }
