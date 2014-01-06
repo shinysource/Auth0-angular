@@ -17,7 +17,7 @@
     });
   };
 
-  Auth0Wrapper.prototype.signout = function (pathToRedirect) {
+  Auth0Wrapper.prototype.signout = function () {
     this.$cookies.profile = undefined;
     this.$cookies.idToken = undefined;
     this.$cookies.accessToken = undefined;
@@ -70,7 +70,7 @@
     };
   });
 
-  auth0.run(function (auth, $cookies, $location, $rootScope, $timeout, $document) {
+  auth0.run(function (auth, $cookies, $location, $rootScope) {
     auth.parseHash(window.location.hash, function (profile, id_token, access_token, state) {
       $cookies.profile = JSON.stringify(profile);
       $cookies.idToken = id_token;
@@ -90,7 +90,7 @@
 
   var authInterceptorModule = angular.module('authInterceptor', ['auth0']);
 
-  authInterceptorModule.factory('authInterceptor', function (auth, $rootScope) {
+  authInterceptorModule.factory('authInterceptor', function (auth, $rootScope, $q) {
     return {
       request: function (config) {
         config.headers = config.headers = {};
