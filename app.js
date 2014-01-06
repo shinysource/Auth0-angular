@@ -21,4 +21,4 @@ app.get('/api/protected', function (req, res) {
 });
 
 app.listen(1337);
-console.log('listening on port 1337');
+console.log('listening on port http://localhost:1337');
