@@ -191,8 +191,8 @@ angular.module("myApp")
 
 There are two examples:
 
-* [widget]: a simple angular app doing auth with social and username/password using the Login Widget.
-* [custom-login]: same as the previous one but without using the widget, just a custom login form.
+* [widget](widget): a simple angular app doing auth with social and username/password using the Login Widget.
+* [custom-login](custom-login): same as the previous one but without using the widget, just a custom login form.
 
 The server side is using node.js and you can run it with `npm install && node app.js`. It is pre-configured with a demo account with Amazon, Facebook, Google and username/password credentials.
 
